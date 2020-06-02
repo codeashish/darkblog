@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
-import classnames from 'classnames'
-import axios from 'axios'
-import './../css/signup.css'
+import { registerUser } from './../../actions/authaction'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
-export default class Signup extends Component {
+import Inputfields from './../common/inputfields'
+import { Link } from 'react-router-dom'
+import './../css/signup.css'
+class Signup extends Component {
   constructor() {
     super();
     this.onChange = this.onChange.bind(this)
@@ -25,6 +29,19 @@ export default class Signup extends Component {
     })
   }
 
+
+
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/login')
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors })
+    }
+  }
   async onSubmit(e) {
     e.preventDefault()
     const newUser = {
@@ -33,19 +50,7 @@ export default class Signup extends Component {
       password: this.state.password,
       password2: this.state.password2
     }
-
-    try {
-       await axios.post('/users/register', newUser)
-      console.log("sucessfull")
-
-    }
-    catch (err) {
-      this.setState({
-        errors: err.response.data
-      })
-
-      // console.log(err.response.data)
-    }
+    this.props.registerUser(newUser, this.props.history)
   }
 
 
@@ -53,60 +58,92 @@ export default class Signup extends Component {
     const { errors } = this.state
     // console.log(errors)
     return (
-      <div>
-        <section className="showcase">
-          <div className="video-container">
-            <video src={`${process.env.PUBLIC_URL}/assests/video/video.webm`} autoPlay muted loop />
-          </div>
-        </section>
-        <div className="form content">
-          <h2>Signup</h2>
-          <form onSubmit={this.onSubmit} id="formaction" className="form-group">
-            <img src={`${process.env.PUBLIC_URL}/assests/img/logo.png`} width="100px" alt="" />
-
-            <div className="input">
-              <div className="inputBox">
-                <label >Username</label>
-                <input type="text" value={this.state.username} className={classnames('form-control form-control-lg', { 'is-invalid': errors.username })} onChange={this.onChange} name="username" placeholder="Username" />
-
-              {errors.username && <div  className='invalid-feedback' > {errors.username}  </div>}
-
-
-              </div>
-
-              <div className="inputBox">
-                <label >Email</label>
-                <input type="text" name="email" style={{fontSize:'18px'}}  className={classnames('form-control form-control-lg', { 'is-invalid': errors.email })} value={this.state.email} onChange={this.onChange} placeholder="Enter your email" />
-                {errors.email && <div  className='invalid-feedback' > {errors.email}  </div>}
-
-              </div>
-              <div className="inputBox">
-                <label >Password</label>
-                <input type="Password" className={classnames('form-control form-control-lg', { 'is-invalid': errors.password })} name="password" placeholder="Password" value={this.state.password} onChange={this.onChange} />
-                {errors.password && <div  className='invalid-feedback' style={{}}  > {errors.password}  </div>}
-
-
-              </div>
-              <div className="inputBox">
-                <label >Conform Password</label>
-                <input type="Password" name="password2" className={classnames('form-control form-control-lg', { 'is-invalid': errors.password2 })} placeholder="Password" value={this.state.password2} onChange={this.onChange} />
-                {errors.password2 && <div  className='invalid-feedback' > {errors.password2}  </div>}
-
-              </div>
+      <div className='container' >
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', maxHeight: '800px' }} >
+          <section className="showcase">
+            <div className="video-container">
+              <video src={`${process.env.PUBLIC_URL}/assests/video/video.webm`} autoPlay muted loop />
             </div>
-            <div className="inputBox">
-              <button type="submit" id="link">
-                <span />
-                <span />
-                <span />
-                <span />
+          </section>
+          <div className="form-group form content">
+            <h2>Signup</h2>
+            <form onSubmit={this.onSubmit} id="formaction" className="form-group">
+              <Link to='/' >   <img src={`${process.env.PUBLIC_URL}/assests/img/logo.png`} style={{width:'100px',height:'90px'}} alt="" /></Link>
+
+              <div className="input">
+
+
+                <Inputfields
+                  label='Username'
+                  type='text'
+                  placeholder='Username'
+                  name='username'
+                  onChange={this.onChange}
+                  value={this.state.username}
+                  errors={errors.username}
+                />
+
+
+                <Inputfields
+                  label='Email'
+                  type='text'
+                  placeholder="Enter your Email"
+                  name='email'
+                  onChange={this.onChange}
+                  value={this.state.email}
+                  errors={errors.email}
+                />
+
+
+                <Inputfields
+                  label='Password'
+                  type='Password'
+                  placeholder='Enter Password'
+                  name='password'
+                  onChange={this.onChange}
+                  value={this.state.password}
+                  errors={errors.password}
+                />
+
+                <Inputfields
+                  label="Conform Password"
+                  type='password'
+                  placeholder='Conform Password'
+                  name='password2'
+                  onChange={this.onChange}
+                  value={this.state.password2}
+                  errors={errors.password2}
+                   />
+
+
+              </div>
+              <div className="inputBox">
+                <button type="submit" id="link">
+                  <span />
+                  <span />
+                  <span />
+                  <span />
           Signup
         </button>
-            </div>
-          </form>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-
     )
   }
 }
+
+Signup.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  user: PropTypes.object
+}
+
+
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+  errors: state.errors
+})
+
+export default connect(mapStateToProps, { registerUser })(withRouter(Signup))

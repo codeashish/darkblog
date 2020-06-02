@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script
+      src="https://kit.fontawesome.com/8db9ce7232.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <style>
+    .container {
+      position: relative;
+      display: flex;
+      justify-items: center;
+      align-items: center;
+      flex-direction: column;
+
+      background: #131419;
+      color: white;
+    }
+    .container label input {
+        -webkit-appearance: none;
+        appearance: none;
+      cursor: pointer;
+    }
+    .container label .fa {
+      position: relative;
+      height: 40px;
+      width: 40px;
+      background: #131419;
+      line-height: 40px;
+      text-align: center;
+      margin: 0 4px;
+      color: white;
+      font-size: 16px;
+      border-radius: 40px;
+      box-shadow: -1px -1px 3px rgba(255, 255, 255, 0.1),
+        2px 2px 6px rgba(0, 0, 0, 0.8);
+      cursor: pointer;
+    }
+
+    .container label .fa:hover {
+      box-shadow: -1px -1px 3px rgba(255, 255, 255, 0.1),
+        2px 2px 6px rgba(0, 0, 0, 0.8),
+        inset -2px -2px 10px rgba(255, 255, 255, 0.1),
+        inset 2px 2px 10px rgba(0, 0, 0, 0.8);
+    }
+    .container label input:checked ~ .fa {
+      color: #03e9f4;
+      box-shadow: inset -2px -2px 10px rgba(255, 255, 255, 0.1),
+        inset 2px 2px 6px rgba(0, 0, 0, 0.8);
+
+      text-shadow: 0 0   5px #03e9f4, 0 0 20px #03e9f4;
+    }
+  </style>
+
+  <body>
+    <div class="container">
+      <p>Are You 18 years old</p>
+      <div>
+        <label for="">
+          <input type="radio" name="age" id="" />
+          <i class="fa fa-check"  aria-hidden="true"></i>
+        </label>
+        <label for="">
+          <input type="radio" name="age" id=""   />
+          <i class="fa fa-times" aria-hidden="true" ></i>
+        </label>
+      </div>
+    </div>
+  </body>
+</html>

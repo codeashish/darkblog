@@ -22,10 +22,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    avataar: {
+    avtaar: {
         type: Buffer
     }
 
+}, {
+    timestamps: true
 })
 
 
@@ -46,12 +48,19 @@ userSchema.methods.createjwttoken = async function () {
         id: user._id,
         username: user.username,
         email: user.email,
-        avtaar: user.avtaar
     }, process.env.SECRET_KEY, {
         expiresIn: '14d'
     })
     await user.save()
     return token
+}
+
+userSchema.methods.toJSON = function () {
+    const user = this;
+    const userobj = user.toObject();
+
+    delete userobj.avtaar
+    return userobj
 }
 
 
